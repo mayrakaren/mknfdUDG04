@@ -1,22 +1,19 @@
 var PORT = process.env.PORT || 5000;
+var express = require('express');
+var app = express();
+
 var http = require('http');
 var server = http.Server(app);
 
-var express = require('express');
-var socket = require('socket.io');
-
-// App 
-var app = express();
-server.listen(PORT, function(){
-    console.log('listening for requests on port 5000,');
-});
-
-// Static files
 app.use(express.static('public'));
 
-// Socket setup & pass server
-var io = socket(server);
-io.on('connection', (socket) => {
+server.listen(PORT, function() {
+  console.log('Chat server running');
+});
+
+var io = require('socket.io')(server);
+
+io.on('connection', function(socket) {
 
     console.log('made socket connection', socket.id);
 
@@ -30,4 +27,5 @@ io.on('connection', (socket) => {
     socket.on('typing', function(data){
         socket.broadcast.emit('typing', data);
     });
+
 });

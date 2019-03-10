@@ -1,14 +1,16 @@
+var PORT = process.env.PORT || 5000;
 var express = require('express');
-var socket = require('socket.io');
-
-// App setup
 var app = express();
-var server = app.listen(4000, function(){
-    console.log('listening for requests on port 4000,');
-});
 
-// Static files
+var http = require('http');
+var server = http.Server(app);
+
 app.use(express.static('public'));
+
+server.listen(PORT, function() {
+  console.log('Chat server running');
+});
+var socket = require('socket.io');
 
 // Socket setup & pass server
 var io = socket(server);
